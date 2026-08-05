@@ -1,8 +1,18 @@
+:root {
+  font-family: Arial, sans-serif;
+  color: #1f2933;
+  background: #f7f8fa;
+}
+
 * {
     box-sizing: border-box;
 }
 
 body {
     margin: 0;
-    font-family: Arial, sans-serif;
+}
+
+.container {
+  width: min(100% - 40px, 1000px);
+  margin: 0 auto;
 }

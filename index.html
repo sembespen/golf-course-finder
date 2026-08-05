@@ -7,9 +7,39 @@
     <title>golf-course-finder</title>
   </head>
   <body>
-    <div id="app">
-      <h1>Golf Course Finder</h1>
-    </div>
+    <header>
+      <div class="container">
+        <h1>Golf Course Finder</h1>
+        <p>Search for golf courses and explore basic course information.</p>
+      </div>
+    </header>
+    <main>
+      <section class="search-section">
+        <div class="container">
+          <h2>Find a course</h2>
+          <form id="course-search-form">
+            <label for="course-search">Course name or location</label>
+            <div class="search-controls">
+              <input 
+              type="search"
+              id="course-search"
+              name="query"
+              placeholder="For example, Drøbak or Oslo"
+              required
+              >
+              <button type="submit">Search</button>
+            </div>
+          </form>
+        </div>
+      </section>
+      <section class="results-section" aria-labelledby="results-heading">
+        <div class="container">
+          <h2 id="results-heading">Results</h2>
+          <div id="search-status" aria-live="polite"></div>
+          <ul id="course-results"></ul>
+        </div>
+      </section>
+    </main>
     <script type="module" src="/src/main.js"></script>
   </body>
 </html>
