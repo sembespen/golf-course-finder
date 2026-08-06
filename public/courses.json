@@ -1,0 +1,16 @@
+[
+    {
+        "name": "Drøbak Golfklubb",
+        "holes": 18,
+        "par": 72,
+        "country": "Norway",
+        "location": "Drøbak"
+    },
+    {
+        "name": "Soon Golfklubb",
+        "holes": 9,
+        "par": 35,
+        "country": "Norway",
+        "location": "Son"
+    }
+]

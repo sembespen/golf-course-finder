@@ -1,47 +1,27 @@
-const courses = [
-    {
-        name: "Drøbak Golfklubb",
-        holes: 18,
-        par: 72,
-        country: "Norway",
-        location: "Drøbak"
-    },
-    {
-        name: "Soon Golfklubb",
-        holes: 9,
-        par: 35,
-        country: "Norway",
-        location: "Son"
-    }
-]
-
-function searchCourses(query) {
+async function searchCourses(query) {
     const normalizedQuery = query.trim().toLowerCase();
 
-    return new Promise((resolve, reject) => {
-        setTimeout(() => {
+    if (normalizedQuery === "") {
+        return [];
+    }
 
-            if (normalizedQuery === "error") {
-                reject(new Error("Simulated error."));
-                return;
-            }
+    const response = await fetch("/courses.json");
 
-            if (normalizedQuery === "") {
-                resolve([]);
-                return;
-            }
+    if (!response.ok) {
+        throw new Error(`Failed to load course data: HTTP ${response.status}`);
+    }
 
-            const matchingCourses = courses.filter((course) => {
-                return (
-                    course.name.toLowerCase().includes(normalizedQuery) ||
-                    course.country.toLowerCase().includes(normalizedQuery) ||
-                    course.location.toLowerCase().includes(normalizedQuery)
-                );
-            });
+    const courses = await response.json();
 
-            resolve(matchingCourses);
-        }, 1000);
+    const matchingCourses = courses.filter((course) => {
+        return (
+            course.name.toLowerCase().includes(normalizedQuery) ||
+            course.country.toLowerCase().includes(normalizedQuery) ||
+            course.location.toLowerCase().includes(normalizedQuery)
+        );
     });
+
+    return matchingCourses;
 }
 
 export { searchCourses };
