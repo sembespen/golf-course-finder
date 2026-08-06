@@ -28,6 +28,18 @@
               required
               >
               <button type="submit">Search</button>
+              <label for="country-preference">Country</label>
+              <select name="country-preference" id="country-preference" >
+                <option value="all">All</option>
+                <option value="norway">Norway</option>
+                <option value="sweden">Sweden</option>
+              </select>
+              <fieldset>   
+                <legend>Holes</legend>             
+                <label><input type="radio" name="hole-preference" value="all" checked> All</label>
+                <label><input type="radio" name="hole-preference" value="18"> 18 holes</label>
+                <label><input type="radio" name="hole-preference" value="9"> 9 holes</label>
+              </fieldset>
             </div>
           </form>
         </div>
