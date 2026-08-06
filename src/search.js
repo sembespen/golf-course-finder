@@ -18,16 +18,29 @@ const courses = [
 function searchCourses(query) {
     const normalizedQuery = query.trim().toLowerCase();
 
-    if (normalizedQuery === "") {
-        return [];
-    }
+    return new Promise((resolve, reject) => {
+        setTimeout(() => {
 
-    return courses.filter((course) => {
-        return (
-            course.name.toLowerCase().includes(normalizedQuery) ||
-            course.country.toLowerCase().includes(normalizedQuery) ||
-            course.location.toLowerCase().includes(normalizedQuery)
-        );
+            if (normalizedQuery === "error") {
+                reject(new Error("Simulated error."));
+                return;
+            }
+
+            if (normalizedQuery === "") {
+                resolve([]);
+                return;
+            }
+
+            const matchingCourses = courses.filter((course) => {
+                return (
+                    course.name.toLowerCase().includes(normalizedQuery) ||
+                    course.country.toLowerCase().includes(normalizedQuery) ||
+                    course.location.toLowerCase().includes(normalizedQuery)
+                );
+            });
+
+            resolve(matchingCourses);
+        }, 1000);
     });
 }
 
