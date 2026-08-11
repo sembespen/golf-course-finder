@@ -1,11 +1,13 @@
-async function searchCourses(query) {
+async function searchCourses(query, signal) {
     const normalizedQuery = query.trim().toLowerCase();
 
     if (normalizedQuery === "") {
         return [];
     }
 
-    const response = await fetch("/courses.json");
+    const response = await fetch("/courses.json", {
+        signal // property shorthand (signal: signal)
+    });
 
     if (!response.ok) {
         throw new Error(`Failed to load course data: HTTP ${response.status}`);

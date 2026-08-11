@@ -21,17 +21,23 @@ let searchDebounceTimer;
 
 let currentSearchResults = [];
 let currentSearchQuery = "";
+let currentSearchController;
 
 async function performSearch() {
+    if (currentSearchController != null) {
+        currentSearchController.abort();
+    }
+
     const queryForThisSearch = searchInput.value;
 
     searchStatusMessage.textContent = "Searching...";
     searchStatus.append(searchStatusMessage);
 
     try {
-        const results = await searchCourses(queryForThisSearch);
+        currentSearchController = new AbortController();
+        const results = await searchCourses(queryForThisSearch, currentSearchController.signal);
 
-        if (queryForThisSearch !== searchInput.value) {
+        if (queryForThisSearch !== searchInput.value) { // stale-response check, less important with the existence of AbortController
             return;
         }
 
@@ -40,6 +46,10 @@ async function performSearch() {
 
         updateResults();
     } catch(error) {
+        if (error.name === "AbortError") {
+            return;
+        }
+
         searchStatusMessage.textContent = "Something went wrong. Please try again.";
 
         console.log(error.message);
