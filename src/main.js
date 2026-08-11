@@ -17,8 +17,28 @@ const countryPreference = document.querySelector('select[name="country-preferenc
 const holePreference = document.querySelectorAll('input[name="hole-preference"]');
 const sortPreference = document.querySelector('select[name=sort-preference]');
 
+let searchDebounceTimer;
+
 let currentSearchResults = [];
 let currentSearchQuery = "";
+
+async function performSearch() {
+
+    searchStatusMessage.textContent = "Searching...";
+    searchStatus.append(searchStatusMessage)
+
+    currentSearchQuery = searchInput.value;
+
+    try {
+        currentSearchResults = await searchCourses(currentSearchQuery);
+
+        updateResults();
+    } catch(error) {
+        searchStatusMessage.textContent = "Something went wrong. Please try again.";
+
+        console.log(error.message);
+    }
+}
 
 function updateResults() {
     searchResults.innerHTML = "";
@@ -42,6 +62,21 @@ function updateResults() {
     renderCourses(searchResults, courses);
 }
 
+searchInput.addEventListener("input", () => {
+    clearTimeout(searchDebounceTimer);
+
+    searchDebounceTimer = setTimeout(() => {
+        performSearch();
+    }, 400);
+});
+
+searchForm.addEventListener("submit", (event) => {
+    event.preventDefault();
+
+    clearTimeout(searchDebounceTimer);
+    performSearch();
+}); 
+
 countryPreference.addEventListener("change", updateResults);
 
 holePreference.forEach((element) => {
@@ -49,24 +84,3 @@ holePreference.forEach((element) => {
 });
 
 sortPreference.addEventListener("change", updateResults);
-
-searchForm.addEventListener("submit", async (event) => {
-    event.preventDefault();
-
-    searchResults.innerHTML = "";
-
-    searchStatusMessage.textContent = "Searching...";
-    searchStatus.append(searchStatusMessage)
-
-    currentSearchQuery = searchInput.value;
-
-    try {
-        currentSearchResults = await searchCourses(currentSearchQuery);
-
-        updateResults();
-    } catch(error) {
-        searchStatusMessage.textContent = "Something went wrong. Please try again.";
-
-        console.log(error.message);
-    }
-}); 
