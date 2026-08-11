@@ -17,11 +17,35 @@ const countryPreference = document.querySelector('select[name="country-preferenc
 const holePreference = document.querySelectorAll('input[name="hole-preference"]');
 const sortPreference = document.querySelector('select[name=sort-preference]');
 
+let searchState = "initial";
+
 let searchDebounceTimer;
 
 let currentSearchResults = [];
 let currentSearchQuery = "";
 let currentSearchController;
+
+function renderSearchState(resultCount = 0) {
+    switch(searchState) {
+        case "initial": 
+            searchStatusMessage.textContent = "Search for a course to get started.";
+            break;
+        case "loading": 
+            searchStatusMessage.textContent = "Searching...";
+            break;
+        case "error": 
+            searchStatusMessage.textContent = "Something went wrong. Please try again.";
+            break;
+        case "empty": 
+            searchStatusMessage.textContent = `No courses found for "${currentSearchQuery}".`;
+            break;
+        case "success": 
+            searchStatusMessage.textContent = `${resultCount} course${resultCount === 1 ? "" : "s"} found for "${currentSearchQuery}".`;
+            break;
+        default: 
+            console.warn(`Unknown search state: ${searchState}`);
+    }
+}
 
 async function performSearch() {
     if (currentSearchController != null) {
@@ -30,9 +54,9 @@ async function performSearch() {
 
     const queryForThisSearch = searchInput.value;
 
-    searchStatusMessage.textContent = "Searching...";
-    searchStatus.append(searchStatusMessage);
-
+    searchState = "loading";
+    renderSearchState();
+    
     try {
         currentSearchController = new AbortController();
         const results = await searchCourses(queryForThisSearch, currentSearchController.signal);
@@ -49,8 +73,8 @@ async function performSearch() {
         if (error.name === "AbortError") {
             return;
         }
-
-        searchStatusMessage.textContent = "Something went wrong. Please try again.";
+        searchState = "error";
+        renderSearchState();
 
         console.log(error.message);
     }
@@ -68,14 +92,16 @@ function updateResults() {
     courses = sortCourses(courses, sortPreference.value);
 
     if (courses.length === 0) {
-        searchStatusMessage.textContent = `No courses found for "${currentSearchQuery}".`;
+        searchState = "empty";
+        renderSearchState();
 
         return; 
     }
     
-    searchStatusMessage.textContent = `${courses.length} course${courses.length === 1 ? "" : "s"} found for "${currentSearchQuery}".`
-
+    searchState = "success";
+    renderSearchState(courses.length);
     renderCourses(searchResults, courses);
+    currentSearchController = null;
 }
 
 searchInput.addEventListener("input", () => {
@@ -100,3 +126,6 @@ holePreference.forEach((element) => {
 });
 
 sortPreference.addEventListener("change", updateResults);
+
+searchStatus.append(searchStatusMessage);
+renderSearchState();
