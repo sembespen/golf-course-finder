@@ -23,14 +23,20 @@ let currentSearchResults = [];
 let currentSearchQuery = "";
 
 async function performSearch() {
+    const queryForThisSearch = searchInput.value;
 
     searchStatusMessage.textContent = "Searching...";
-    searchStatus.append(searchStatusMessage)
-
-    currentSearchQuery = searchInput.value;
+    searchStatus.append(searchStatusMessage);
 
     try {
-        currentSearchResults = await searchCourses(currentSearchQuery);
+        const results = await searchCourses(queryForThisSearch);
+
+        if (queryForThisSearch !== searchInput.value) {
+            return;
+        }
+
+        currentSearchQuery = queryForThisSearch;
+        currentSearchResults = results;
 
         updateResults();
     } catch(error) {
