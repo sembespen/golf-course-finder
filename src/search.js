@@ -5,7 +5,7 @@ async function searchCourses(query, signal) {
         return [];
     }
 
-    const response = await fetch("/courses.json", {
+    const response = await fetch(`${import.meta.env.BASE_URL}courses.json`, {
         signal // property shorthand (signal: signal)
     });
 
