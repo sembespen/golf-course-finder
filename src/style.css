@@ -1,7 +1,16 @@
 :root {
   font-family: Arial, sans-serif;
-  color: #1f2933;
-  background: #f7f8fa;
+
+  --color-text: #1f2933;
+  --color-background: #f7f8fa;
+  --color-surface: #ffffff;
+  --color-primary: #163824;
+  --color-primary-hover: #245a39;
+  --color-border: #cbd2d9;
+  --color-focus: #6ea580;
+
+  color: var(--color-text);
+  background: var(--color-background);
 }
 
 * {
@@ -15,4 +24,162 @@ body {
 .container {
   width: min(100% - 40px, 1000px);
   margin: 0 auto;
+}
+
+header {
+  padding: 32px 0;
+
+  background: var(--color-primary);
+  color: white;
+}
+
+header h1 {
+  margin: 0;
+}
+
+header p {
+  margin: 8px 0 0;
+}
+
+.search-section, 
+.results-section {
+  padding: 32px 0;
+}
+
+.search-section h2,
+.results-section h2 {
+  margin-top: 0;
+}
+
+#course-search-form {
+  padding: 24px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+}
+
+.search-controls {
+  display: grid;
+  grid-template-columns: 2fr auto 1fr;
+  gap: 16px;
+  align-items: end;
+}
+
+.form-field {
+  display: grid;
+  gap: 6px;
+}
+
+.form-field > label,
+legend {
+  font-weight: 600;
+}
+
+input,
+select,
+button {
+  font: inherit;
+}
+
+input[type="search"],
+select {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  background: var(--color-surface);
+}
+
+fieldset {
+  margin: 0;
+  padding: 12px;
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+
+  grid-column: 1 / -1;
+}
+
+legend {
+  padding: 0 4px;
+}
+
+fieldset label {
+  margin-right: 16px;
+}
+
+button {
+  padding: 10px 16px;
+  border: 0;
+  border-radius: 6px;
+  background: var(--color-primary);
+  color: white;
+  cursor: pointer;
+
+  transition: background 150ms ease;
+}
+
+button:hover {
+  background: var(--color-primary-hover);
+}
+
+input:focus-visible,
+select:focus-visible,
+button:focus-visible {
+  outline: 3px solid var(--color-focus);
+  outline-offset: 2px;
+}
+
+#search-status {
+  margin-bottom: 20px;
+  min-height: 24px;
+}
+
+#course-results {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+#course-results li {
+  padding: 20px;
+
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+
+  transition:
+    transform 150ms ease,
+    box-shadow 150ms ease;
+}
+
+#course-results li:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgb(0 0 0 / 8%);
+}
+
+#course-results h3 {
+  margin: 0 0 12px;
+}
+
+#course-results p {
+  margin: 4px 0;
+}
+
+@media (max-width: 768px) {
+  .search-controls {
+    grid-template-columns: 1fr;
+  }
+
+  fieldset {
+    grid-column: auto;
+  }
+
+  fieldset label {
+    display: block;
+    margin: 8px 0;
+  }
 }
